@@ -1,0 +1,38 @@
+green: hsl(99, 16, 28);
+dark-green: hsl(80, 34, 12);
+wheat: hsl(36, 43, 77);
+brown: hsl(24, 45, 36);
+orange: hsl(24, 84, 44);
+
+h1, .h1: {
+    fontSize: 30px,
+    fontWeight: 700,
+},
+h2, .h2: {
+    fontSize: 24px,
+    fontWeight: 600,
+},
+h3, .h3: {
+    fontSize: 20px,
+    fontWeight: 500,
+},
+h4, .h4: {
+    fontSize: 18px,
+    fontWeight: 400,
+},
+h5, .h5: {
+    fontSize: 16px,
+    fontWeight: 400,
+},
+bold: {
+    fontWeight: 700,
+},
+semiBold: {
+    fontWeight: 600,
+},
+medium: {
+    fontWeight: 500,
+},
+regular: {
+    fontWeight: 400,
+},

@@ -5,7 +5,8 @@
     "paths": {
       "@/*": [
         "./*"
-      ]
+      ],
+      "@/theme": ["./src/theme"]
     }
   },
   "include": [
