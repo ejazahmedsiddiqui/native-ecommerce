@@ -44,7 +44,7 @@ const featuredProducts = [
     name: 'Smart Watch',
     price: '$199.99',
     originalPrice: '$299.99',
-    image: watchImage, 
+    image: watchImage,
     rating: 4.8,
     discount: '33% OFF',
   },
@@ -84,6 +84,8 @@ export default function HomeScreen() {
     </TouchableOpacity>
   );
 
+  
+  // PRODUCT CAROUSEL
   const renderProduct = ({ item }) => (
     <TouchableOpacity style={styles.productCard}>
       <View style={styles.productImageContainer}>
@@ -94,23 +96,32 @@ export default function HomeScreen() {
           </View>
         )}
       </View>
+
+
       <View style={styles.productInfo}>
         <Text style={styles.productName} numberOfLines={2}>
-          {item.name}
+          {/* NUMBER OF LINES -> THIS PROPERTY LIMITS THE NUMBER OF LINES AND ANYTHING MORE THAN THAT IS REPLACED BY ELEPSIS (...) */}
+
+          {item.name} { /* NAME OF ITEM IN CAROUSEL*/}
         </Text>
         <View style={styles.ratingContainer}>
           <Text style={styles.rating}>⭐ {item.rating}</Text>
+          {/* RATING ^ ex:  ⭐ 4.3 */}
         </View>
         <View style={styles.priceContainer}>
+          
           <Text style={styles.price}>{item.price}</Text>
           {item.originalPrice && (
             <Text style={styles.originalPrice}>{item.originalPrice}</Text>
           )}
+          {/* THIS LINE IS ONLY DISPLAYED IF item.originalPrice is true as REACT IGNORES EVERYTHING AFTER FIRST FALSE  */}
+
         </View>
       </View>
     </TouchableOpacity>
   );
 
+  // THIS FUNCTION RENDERS A BANNER  ex: SUMMER SALE!! 50% off, etc.
   const renderBanner = ({ item }) => (
     <View style={[styles.bannerCard, { backgroundColor: item.backgroundColor }]}>
       <Text style={[styles.bannerTitle, { color: item.textColor }]}>
@@ -157,7 +168,7 @@ export default function HomeScreen() {
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Banner Carousel */}
-        <View style={styles.section}>
+        <View style={[styles.section, { paddingTop: 20 }]} >
           <FlatList
             data={bannerAds}
             renderItem={renderBanner}
@@ -232,6 +243,7 @@ export default function HomeScreen() {
             data={featuredProducts}
             renderItem={renderProduct}
             keyExtractor={(item) => `rec-${item.id}`}
+            // the keyextractor (or id) becomes rec-1, rec-2, rec-3. This is done to prevent mismatch in multiple flatlists in a single file
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.productsContainer}
@@ -248,7 +260,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background.primary,
+    backgroundColor: theme.colors.accent.green[200],
   },
   header: {
     backgroundColor: theme.colors.white,
