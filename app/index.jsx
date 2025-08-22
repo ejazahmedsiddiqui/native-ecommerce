@@ -260,7 +260,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.accent.green[200],
+    marginTop: 10,
   },
   header: {
     backgroundColor: theme.colors.white,

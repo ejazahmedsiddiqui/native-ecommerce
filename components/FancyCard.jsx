@@ -1,9 +1,39 @@
-import { FlatList, Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
 import { theme } from '../utils/themes'
 
-export default function FancyCard() {
+// Separate component for individual cards with their own state
+const CardItem = ({ item }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
 
+    const toggleExpansion = () => {
+        setIsExpanded(!isExpanded);
+    };
+
+    return (
+        <View style={[styles.card, styles.cardElevated]}>
+            <Image
+                source={{ uri: item.uri }}
+                style={styles.cardImage}
+            />
+            <View style={styles.cardBody}>
+                <Text style={styles.cardTitle}>{item.title}</Text>
+                <Text style={styles.cardLabel}>{item.label}</Text>
+                <Text style={styles.cardDescription} numberOfLines={isExpanded ? undefined : 3}>
+                    {item.description}
+                </Text>
+                <TouchableOpacity onPress={toggleExpansion}>
+                    <Text style={styles.showMoreText}>
+                        {isExpanded ? 'Show Less...' : 'Show More...'}
+                    </Text>
+                </TouchableOpacity>
+                <Text style={styles.cardFooter}>{item.footer}</Text>
+            </View>
+        </View>
+    );
+};
+
+export default function FancyCard() {
     const elevatedCard = [
         {
             id: 1,
@@ -22,31 +52,16 @@ export default function FancyCard() {
             footer: "5km away",
         },
         {
-            id: '3',
+            id: 3, // Fixed: changed from '3' to 3 for consistency
             title: 'Red Fort',
             label: 'Delhi',
             description: 'The Red Fort is a historic fortified palace of the Mughal emperors of India, located in the center of the old city of Delhi. Every year on India\'s Independence Day, the Prime Minister hoists the Indian flag at the main gate of the fort and delivers a nationally broadcast speech from its ramparts.',
             uri: 'https://img.indiahighlight.com/1170x550/ih/uploads/1696599198.jpg',
             footer: "5km away"
         }
-
     ];
 
-    const renderCard = ({ item }) => (
-        <View style={[styles.card, styles.cardElevated]}>
-            <Image
-                source={{ uri: item.uri }}
-                style={styles.cardImage}
-            />
-            <View style={styles.cardBody}>
-                <Text style={styles.cardTitle}>{item.title}</Text>
-                <Text style={styles.cardLabel}>{item.label}</Text>
-                <Text style={styles.cardDescription} numberOfLines={4}>{item.description}</Text>
-                <Text style={styles.cardFooter}>{item.footer}</Text>
-            </View>
-        </View>
-
-    );
+    const renderCard = ({ item }) => <CardItem item={item} />;
 
     return (
         <View style={styles.fancyCard}>
@@ -54,14 +69,13 @@ export default function FancyCard() {
             <FlatList
                 data={elevatedCard}
                 renderItem={renderCard}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.id.toString()}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContainer}
                 initialNumToRender={2}
                 maxToRenderPerBatch={3}
                 windowSize={5}
-            >
-            </FlatList>
+            />
         </View>
     )
 }
@@ -77,15 +91,14 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     scrollContainer: {
-        paddingBottom: 20, // Add some padding at the bottom
+        paddingBottom: 20,
     },
     card: {
         width: 350,
-        // Removed fixed height - let it size to content
         borderRadius: 10,
         marginHorizontal: 16,
         marginVertical: 12,
-        alignSelf: 'center', // Center the cards horizontally
+        alignSelf: 'center',
     },
     cardElevated: {
         backgroundColor: theme.colors.accent.blue[200],
@@ -103,11 +116,11 @@ const styles = StyleSheet.create({
         width: '100%',
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
-        resizeMode: 'cover', // Ensure proper image scaling
+        resizeMode: 'cover',
     },
     cardBody: {
         paddingHorizontal: 12,
-        paddingVertical: 12, // Add vertical padding
+        paddingVertical: 12,
     },
     cardTitle: {
         color: theme.colors.neutral[900],
@@ -123,9 +136,14 @@ const styles = StyleSheet.create({
     cardDescription: {
         fontSize: 14,
         color: theme.colors.neutral[600],
-        marginBottom: 12, // Increased margin
+        marginBottom: 12,
         lineHeight: theme.typography.lineHeights.bodySmall,
-        // Removed padding - it's redundant with cardBody padding
+    },
+    showMoreText: {
+        color: theme.colors.accent.blue[600],
+        fontSize: 14,
+        fontWeight: '500',
+        marginBottom: 8,
     },
     cardFooter: {
         color: theme.colors.neutral[800],
