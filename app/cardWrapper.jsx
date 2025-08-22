@@ -1,15 +1,9 @@
 import React from 'react';
 import {
-    Dimensions,
-    FlatList,
-    Image,
     SafeAreaView,
-    ScrollView,
     StatusBar,
     StyleSheet,
     Text,
-    TextInput,
-    TouchableOpacity,
     View,
 } from 'react-native'
 import { theme } from '../utils/themes';
