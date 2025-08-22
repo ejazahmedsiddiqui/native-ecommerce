@@ -16,6 +16,7 @@ import headphonesImage from '../assets/images/headphones.jpg';
 import shoesImage from '../assets/images/shoes.webp';
 import watchImage from '../assets/images/watch.webp';
 import { theme } from '../utils/themes';
+import FeaturedProducts from '../components/FeaturedProducts'
 
 const { width } = Dimensions.get('window');
 
@@ -27,36 +28,6 @@ const categories = [
   { id: '4', name: 'Sports', icon: '⚽', color: theme.colors.accent.yellow[500] },
   { id: '5', name: 'Beauty', icon: '💄', color: theme.colors.accent.red[500] },
   { id: '6', name: 'Books', icon: '📚', color: theme.colors.primary500 },
-];
-
-const featuredProducts = [
-  {
-    id: '1',
-    name: 'Wireless Headphones',
-    price: '$99.99',
-    originalPrice: '$149.99',
-    image: headphonesImage,
-    rating: 4.5,
-    discount: '33% OFF',
-  },
-  {
-    id: '2',
-    name: 'Smart Watch',
-    price: '$199.99',
-    originalPrice: '$299.99',
-    image: watchImage,
-    rating: 4.8,
-    discount: '33% OFF',
-  },
-  {
-    id: '3',
-    name: 'Running Shoes',
-    price: '$89.99',
-    originalPrice: '$120.99',
-    image: shoesImage,
-    rating: 4.3,
-    discount: '25% OFF',
-  },
 ];
 
 const bannerAds = [
@@ -214,41 +185,10 @@ export default function HomeScreen() {
         </View>
 
         {/* Featured Products */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Featured Products</Text>
-            <TouchableOpacity>
-              <Text style={styles.seeAllText}>See All</Text>
-            </TouchableOpacity>
-          </View>
-          <FlatList
-            data={featuredProducts}
-            renderItem={renderProduct}
-            keyExtractor={(item) => item.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.productsContainer}
-          />
-        </View>
+        <FeaturedProducts />
 
         {/* Recommended Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Recommended for You</Text>
-            <TouchableOpacity>
-              <Text style={styles.seeAllText}>See All</Text>
-            </TouchableOpacity>
-          </View>
-          <FlatList
-            data={featuredProducts}
-            renderItem={renderProduct}
-            keyExtractor={(item) => `rec-${item.id}`}
-            // the keyextractor (or id) becomes rec-1, rec-2, rec-3. This is done to prevent mismatch in multiple flatlists in a single file
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.productsContainer}
-          />
-        </View>
+        <FeaturedProducts />
 
         {/* Bottom Spacing */}
         <View style={styles.bottomSpacing} />
@@ -260,12 +200,12 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 10,
+    backgroundColor: theme.colors.background.tertiary,
   },
   header: {
     backgroundColor: theme.colors.white,
     paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.md,
+    paddingTop: 20,
     paddingBottom: theme.spacing.lg,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border.light,
@@ -422,72 +362,6 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     fontSize: theme.typography.fontSizes.bodySmall,
     fontWeight: theme.typography.fontWeights.bold,
-  },
-  productsContainer: {
-    paddingHorizontal: theme.spacing.lg,
-  },
-  productCard: {
-    width: 180,
-    backgroundColor: theme.colors.white,
-    borderRadius: theme.borderRadius.lg,
-    marginRight: theme.spacing.md,
-    ...theme.shadows.md,
-  },
-  productImageContainer: {
-    position: 'relative',
-  },
-  productImage: {
-    width: '100%',
-    height: 140,
-    borderTopLeftRadius: theme.borderRadius.lg,
-    borderTopRightRadius: theme.borderRadius.lg,
-    backgroundColor: theme.colors.background.secondary,
-  },
-  discountBadge: {
-    position: 'absolute',
-    top: theme.spacing.sm,
-    left: theme.spacing.sm,
-    backgroundColor: theme.colors.error,
-    paddingHorizontal: theme.spacing.sm,
-    paddingVertical: theme.spacing.xs,
-    borderRadius: theme.borderRadius.sm,
-  },
-  discountText: {
-    color: theme.colors.white,
-    fontSize: theme.typography.fontSizes.caption,
-    fontWeight: theme.typography.fontWeights.bold,
-  },
-  productInfo: {
-    padding: theme.spacing.md,
-  },
-  productName: {
-    fontSize: theme.typography.fontSizes.bodyMedium,
-    fontWeight: theme.typography.fontWeights.medium,
-    color: theme.colors.text.primary,
-    marginBottom: theme.spacing.xs,
-    lineHeight: 20,
-  },
-  ratingContainer: {
-    marginBottom: theme.spacing.sm,
-  },
-  rating: {
-    fontSize: theme.typography.fontSizes.bodySmall,
-    color: theme.colors.text.secondary,
-  },
-  priceContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  price: {
-    fontSize: theme.typography.fontSizes.bodyLarge,
-    fontWeight: theme.typography.fontWeights.bold,
-    color: theme.colors.accent.green[500],
-    marginRight: theme.spacing.sm,
-  },
-  originalPrice: {
-    fontSize: theme.typography.fontSizes.bodySmall,
-    color: theme.colors.text.tertiary,
-    textDecorationLine: 'line-through',
   },
   bottomSpacing: {
     height: theme.spacing.xxxxl,
