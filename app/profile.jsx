@@ -6,13 +6,14 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import { 
+import {
   Ionicons,
   MaterialIcons,
   Feather
 } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
-const ProfileScreen = () => {
+const profile = ({userDetails}) => {
   const menuItems = [
     { icon: 'heart', iconSet: Ionicons, label: 'Your Favourites', color: '#ef4444' },
     { icon: 'wallet', iconSet: Ionicons, label: 'Wallet', color: '#10b981' },
@@ -23,24 +24,52 @@ const ProfileScreen = () => {
     { icon: 'log-out', iconSet: Feather, label: 'Logout', color: '#dc2626' },
   ];
 
-  const handleMenuPress = (label) => {
+
+const handleMenuPress = (label) => {
     console.log(`Pressed: ${label}`);
-    // Add your navigation logic here
-  };
+
+    // Handle different menu items
+    switch (label) {
+        case 'Your Favourites':
+            // router.push('/favourites'); // Uncomment when you have this screen
+            break;
+        case 'Wallet':
+            // router.push('/wallet'); // Uncomment when you have this screen
+            break;
+        case 'Payment':
+            // router.push('/payment'); // Uncomment when you have this screen
+            break;
+        case 'Friends':
+            // router.push('/friends'); // Uncomment when you have this screen
+            break;
+        case 'Promotions':
+            // router.push('/promotions'); // Uncomment when you have this screen
+            break;
+        case 'Settings':
+            // router.push('/settings'); // Uncomment when you have this screen
+            break;
+        case 'Logout':
+            // Navigate to sign in screen
+            router.replace('/signIn'); // This is correct since signIn.jsx is in the app folder
+            break;
+        default:
+            console.log('Unknown menu item');
+    }
+};
 
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Profile</Text>
-        
+
         {/* User Info Section */}
         <View style={styles.userSection}>
           {/* User Image */}
           <View style={styles.userImage}>
             <Text style={styles.userInitials}>JD</Text>
           </View>
-          
+
           {/* User Details */}
           <View style={styles.userInfo}>
             <Text style={styles.userName}>John Doe</Text>
@@ -49,7 +78,7 @@ const ProfileScreen = () => {
             </Text>
           </View>
         </View>
-        
+
         {/* Contact Info */}
         <View style={styles.contactInfo}>
           <View style={styles.contactItem}>
@@ -62,7 +91,7 @@ const ProfileScreen = () => {
           </View>
         </View>
       </View>
-      
+
       {/* Menu Items */}
       <View style={styles.menuContainer}>
         {menuItems.map((item, index) => {
@@ -190,4 +219,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default profile;

@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
         borderRadius: theme.borderRadius.lg,
         marginRight: theme.spacing.md,
         ...theme.shadows.md,
+        marginBottom: 10,
     },
     productImageContainer: {
         position: 'relative',

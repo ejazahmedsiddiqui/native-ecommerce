@@ -12,11 +12,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import headphonesImage from '../assets/images/headphones.jpg';
-import shoesImage from '../assets/images/shoes.webp';
-import watchImage from '../assets/images/watch.webp';
 import { theme } from '../utils/themes';
 import FeaturedProducts from '../components/FeaturedProducts'
+import Category from '../components/Category'
 
 const { width } = Dimensions.get('window');
 
@@ -55,7 +53,7 @@ export default function HomeScreen() {
     </TouchableOpacity>
   );
 
-  
+
   // PRODUCT CAROUSEL
   const renderProduct = ({ item }) => (
     <TouchableOpacity style={styles.productCard}>
@@ -80,7 +78,7 @@ export default function HomeScreen() {
           {/* RATING ^ ex:  ⭐ 4.3 */}
         </View>
         <View style={styles.priceContainer}>
-          
+
           <Text style={styles.price}>{item.price}</Text>
           {item.originalPrice && (
             <Text style={styles.originalPrice}>{item.originalPrice}</Text>
@@ -154,22 +152,7 @@ export default function HomeScreen() {
         </View>
 
         {/* Categories */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Shop by Category</Text>
-            <TouchableOpacity>
-              <Text style={styles.seeAllText}>See All</Text>
-            </TouchableOpacity>
-          </View>
-          <FlatList
-            data={categories}
-            renderItem={renderCategory}
-            keyExtractor={(item) => item.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.categoriesContainer}
-          />
-        </View>
+        <Category />
 
         {/* Flash Sale Section */}
         <View style={styles.section}>
@@ -316,28 +299,7 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.fontSizes.bodyLarge,
     fontWeight: theme.typography.fontWeights.medium,
   },
-  categoriesContainer: {
-    paddingHorizontal: theme.spacing.lg,
-  },
-  categoryCard: {
-    width: 80,
-    height: 80,
-    borderRadius: theme.borderRadius.lg,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: theme.spacing.md,
-    ...theme.shadows.sm,
-  },
-  categoryIcon: {
-    fontSize: 24,
-    marginBottom: theme.spacing.xs,
-  },
-  categoryName: {
-    fontSize: theme.typography.fontSizes.bodySmall,
-    color: theme.colors.white,
-    fontWeight: theme.typography.fontWeights.medium,
-    textAlign: 'center',
-  },
+
   flashSaleHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
