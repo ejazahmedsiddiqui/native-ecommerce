@@ -15,18 +15,10 @@ import {
 import { theme } from '../utils/themes';
 import FeaturedProducts from '../components/FeaturedProducts'
 import Category from '../components/Category'
+import { useRouter } from 'expo-router';
+
 
 const { width } = Dimensions.get('window');
-
-// Sample data - replace with your actual data
-const categories = [
-  { id: '1', name: 'Electronics', icon: '📱', color: theme.colors.accent.blue[500] },
-  { id: '2', name: 'Fashion', icon: '👕', color: theme.colors.accent.orange[500] },
-  { id: '3', name: 'Home', icon: '🏠', color: theme.colors.accent.green[500] },
-  { id: '4', name: 'Sports', icon: '⚽', color: theme.colors.accent.yellow[500] },
-  { id: '5', name: 'Beauty', icon: '💄', color: theme.colors.accent.red[500] },
-  { id: '6', name: 'Books', icon: '📚', color: theme.colors.primary500 },
-];
 
 const bannerAds = [
   {
@@ -45,7 +37,7 @@ const bannerAds = [
   },
 ];
 
-export default function HomeScreen() {
+export default function index() {
   const renderCategory = ({ item }) => (
     <TouchableOpacity style={[styles.categoryCard, { backgroundColor: item.color }]}>
       <Text style={styles.categoryIcon}>{item.icon}</Text>

@@ -12,6 +12,10 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { useRouter } from 'expo-router';
+import headphonesImage from '../assets/images/headphones.jpg';
+import shoesImage from '../assets/images/shoes.webp';
+import watchImage from '../assets/images/watch.webp';
 import { theme } from '../utils/themes';
 
 const categories = [
@@ -25,8 +29,18 @@ const categories = [
 
 const Category = () => {
 
+    const router = useRouter();
+
+    const handleCategoryPress = (name) => {
+        console.log('Navigating to category:', name);
+        console.log('Route will be:', `/(category)/${name}`);
+        router.push(`/(category)/${name}`); // Fixed typo: was "catgeory"
+    }
     const renderCategory = ({ item }) => (
-        <TouchableOpacity style={[styles.categoryCard, { backgroundColor: item.color }]}>
+        <TouchableOpacity
+            style={[styles.categoryCard, { backgroundColor: item.color }]}
+            onPress={() => handleCategoryPress(item.name)}
+        >
             <Text style={styles.categoryIcon}>{item.icon}</Text>
             <Text style={styles.categoryName}>{item.name}</Text>
         </TouchableOpacity>

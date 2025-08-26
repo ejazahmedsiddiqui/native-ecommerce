@@ -12,11 +12,11 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { useRouter } from 'expo-router';
 import headphonesImage from '../assets/images/headphones.jpg';
 import shoesImage from '../assets/images/shoes.webp';
 import watchImage from '../assets/images/watch.webp';
 import { theme } from '../utils/themes';
-
 
 const featuredProducts = [
     {
@@ -27,6 +27,7 @@ const featuredProducts = [
         image: headphonesImage,
         rating: 4.5,
         discount: '33% OFF',
+        productId: 'WireLessHeadphone01'
     },
     {
         id: '2',
@@ -36,6 +37,7 @@ const featuredProducts = [
         image: watchImage,
         rating: 4.8,
         discount: '33% OFF',
+        productId: 'SmartWatch01'
     },
     {
         id: '3',
@@ -45,13 +47,25 @@ const featuredProducts = [
         image: shoesImage,
         rating: 4.3,
         discount: '25% OFF',
+        productId: 'Shoes01'
     },
 ];
+
 const FeaturedProducts = () => {
+    const router = useRouter();
+
+    const handleProductPress = (productId) => {
+        console.log('Navigating to product:', productId);
+        console.log('Route will be:', `/product/${productId}`);
+        router.push(`/product/${productId}`);
+    };
 
     // PRODUCT CAROUSEL
     const renderProduct = ({ item }) => (
-        <TouchableOpacity style={styles.productCard}>
+        <TouchableOpacity 
+            style={styles.productCard}
+            onPress={() => handleProductPress(item.productId)}
+        >
             <View style={styles.productImageContainer}>
                 <Image source={item.image} style={styles.productImage} />
                 {item.discount && (
@@ -61,11 +75,9 @@ const FeaturedProducts = () => {
                 )}
             </View>
 
-
             <View style={styles.productInfo}>
                 <Text style={styles.productName} numberOfLines={2}>
                     {/* NUMBER OF LINES -> THIS PROPERTY LIMITS THE NUMBER OF LINES AND ANYTHING MORE THAN THAT IS REPLACED BY ELEPSIS (...) */}
-
                     {item.name} { /* NAME OF ITEM IN CAROUSEL*/}
                 </Text>
                 <View style={styles.ratingContainer}>
@@ -73,13 +85,11 @@ const FeaturedProducts = () => {
                     {/* RATING ^ ex:  ⭐ 4.3 */}
                 </View>
                 <View style={styles.priceContainer}>
-
                     <Text style={styles.price}>{item.price}</Text>
                     {item.originalPrice && (
                         <Text style={styles.originalPrice}>{item.originalPrice}</Text>
                     )}
                     {/* THIS LINE IS ONLY DISPLAYED IF item.originalPrice is true as REACT IGNORES EVERYTHING AFTER FIRST FALSE  */}
-
                 </View>
             </View>
         </TouchableOpacity>
@@ -191,24 +201,24 @@ const styles = StyleSheet.create({
         color: theme.colors.accent.green[500],
         fontWeight: theme.typography.fontWeights.medium,
     },
-      section: {
-    marginBottom: theme.spacing.xl,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacing.lg,
-    marginBottom: theme.spacing.md,
-  },
-  sectionTitle: {
-    fontSize: theme.typography.fontSizes.heading3,
-    fontWeight: theme.typography.fontWeights.bold,
-    color: theme.colors.text.primary,
-  },
-  seeAllText: {
-    fontSize: theme.typography.fontSizes.bodyMedium,
-    color: theme.colors.accent.green[500],
-    fontWeight: theme.typography.fontWeights.medium,
-  },
+    section: {
+        marginBottom: theme.spacing.xl,
+    },
+    sectionHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: theme.spacing.lg,
+        marginBottom: theme.spacing.md,
+    },
+    sectionTitle: {
+        fontSize: theme.typography.fontSizes.heading3,
+        fontWeight: theme.typography.fontWeights.bold,
+        color: theme.colors.text.primary,
+    },
+    seeAllText: {
+        fontSize: theme.typography.fontSizes.bodyMedium,
+        color: theme.colors.accent.green[500],
+        fontWeight: theme.typography.fontWeights.medium,
+    },
 })

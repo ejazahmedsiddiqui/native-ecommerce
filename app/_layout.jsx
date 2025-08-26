@@ -69,6 +69,18 @@ export default function Layout() {
           href: null, // This completely hides the route group from tabs
         }}
       />
+      <Tabs.Screen
+        name="product/[productId]"
+        options={{
+          href: null, // This completely hides the route group from tabs
+        }}
+      />
+      <Tabs.Screen
+        name="(category)/[category]"
+        options={{
+          href: null, // This completely hides the route group from tabs
+        }}
+      />
     </Tabs>
   );
 }
