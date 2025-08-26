@@ -5,60 +5,80 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {
   Ionicons,
   MaterialIcons,
-  Feather
+  Feather,
+  Zocial
 } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { theme } from '../utils/themes'
 
-const profile = ({userDetails}) => {
+const profile = ({ userDetails }) => {
   const menuItems = [
-    { icon: 'heart', iconSet: Ionicons, label: 'Your Favourites', color: '#ef4444' },
-    { icon: 'wallet', iconSet: Ionicons, label: 'Wallet', color: '#10b981' },
-    { icon: 'card', iconSet: Ionicons, label: 'Payment', color: '#3b82f6' },
+    { icon: 'heart', iconSet: Ionicons, label: 'Your Favourites', color: theme.colors.accent.red[700] },
+    { icon: 'wallet', iconSet: Ionicons, label: 'Wallet', color: theme.colors.accent.green[400] },
+    { icon: 'card', iconSet: Ionicons, label: 'Payment', color: theme.colors.accent.blue[600] },
     { icon: 'people', iconSet: Ionicons, label: 'Friends', color: '#8b5cf6' },
     { icon: 'percent', iconSet: MaterialIcons, label: 'Promotions', color: '#f59e0b' },
     { icon: 'settings', iconSet: Ionicons, label: 'Settings', color: '#6b7280' },
-    { icon: 'log-out', iconSet: Feather, label: 'Logout', color: '#dc2626' },
+    { icon: 'log-out', iconSet: Feather, label: 'Logout', color: theme.colors.accent.red[800] },
+    { icon: 'log-in', iconSet: Feather, label: 'Login', color: theme.colors.accent.blue[700] },
+    { icon: 'app-registration', iconSet: MaterialIcons, label: 'Register', color: theme.colors.accent.yellow[600] },
+    { icon: 'guest', iconSet: Zocial, label: 'Guest', color: theme.colors.accent.orange[500] },
   ];
 
 
-const handleMenuPress = (label) => {
+  const handleMenuPress = (label) => {
     console.log(`Pressed: ${label}`);
 
     // Handle different menu items
     switch (label) {
-        case 'Your Favourites':
-            // router.push('/favourites'); // Uncomment when you have this screen
-            break;
-        case 'Wallet':
-            // router.push('/wallet'); // Uncomment when you have this screen
-            break;
-        case 'Payment':
-            // router.push('/payment'); // Uncomment when you have this screen
-            break;
-        case 'Friends':
-            // router.push('/friends'); // Uncomment when you have this screen
-            break;
-        case 'Promotions':
-            // router.push('/promotions'); // Uncomment when you have this screen
-            break;
-        case 'Settings':
-            // router.push('/settings'); // Uncomment when you have this screen
-            break;
-        case 'Logout':
-            // Navigate to sign in screen
-            router.replace('/signIn'); // This is correct since signIn.jsx is in the app folder
-            break;
-        default:
-            console.log('Unknown menu item');
+      case 'Your Favourites':
+        // router.push('/favourites'); // Uncomment when you have this screen
+        break;
+      case 'Wallet':
+        // router.push('/wallet'); // Uncomment when you have this screen
+        break;
+      case 'Payment':
+        // router.push('/payment'); // Uncomment when you have this screen
+        break;
+      case 'Friends':
+        // router.push('/friends'); // Uncomment when you have this screen
+        break;
+      case 'Promotions':
+        // router.push('/promotions'); // Uncomment when you have this screen
+        break;
+      case 'Settings':
+        // router.push('/settings'); // Uncomment when you have this screen
+        break;
+      case 'Logout':
+        // Navigate to sign in screen
+        router.replace('/(auth)/signIn');
+        break;
+      case 'Login':
+        // Navigate to sign in screen
+        router.replace('/(auth)/login');
+        break;
+      case 'Register':
+        // Navigate to sign in screen
+        router.replace('/(auth)/register');
+        break;
+      case 'Guest':
+        // Navigate to sign in screen
+        router.replace('/(auth)/guest');
+        break;
+      default:
+        console.log('Unknown menu item');
     }
-};
+  };
 
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+
+
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Profile</Text>
@@ -93,29 +113,31 @@ const handleMenuPress = (label) => {
       </View>
 
       {/* Menu Items */}
-      <View style={styles.menuContainer}>
-        {menuItems.map((item, index) => {
-          const IconComponent = item.iconSet;
-          return (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.menuItem,
-                index === menuItems.length - 1 && styles.lastMenuItem
-              ]}
-              onPress={() => handleMenuPress(item.label)}
-              activeOpacity={0.7}
-            >
-              <View style={styles.menuIconContainer}>
-                <IconComponent name={item.icon} size={20} color={item.color} />
-              </View>
-              <Text style={styles.menuLabel}>{item.label}</Text>
-              <Ionicons name="chevron-forward" size={16} color="#d1d5db" />
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    </ScrollView>
+      <ScrollView>
+        <View style={styles.menuContainer}>
+          {menuItems.map((item, index) => {
+            const IconComponent = item.iconSet;
+            return (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.menuItem,
+                  index === menuItems.length - 1 && styles.lastMenuItem
+                ]}
+                onPress={() => handleMenuPress(item.label)}
+                activeOpacity={0.7}
+              >
+                <View style={styles.menuIconContainer}>
+                  <IconComponent name={item.icon} size={20} color={item.color} />
+                </View>
+                <Text style={styles.menuLabel}>{item.label}</Text>
+                <Ionicons name="chevron-forward" size={16} color="#d1d5db" />
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </ScrollView>
+    </SafeAreaView >
   );
 };
 

@@ -23,14 +23,27 @@ export default function Layout() {
       }}
     >
       <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? "person" : "person-outline"}
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="index"
         options={{
           title: "Home",
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons 
-              name={focused ? "home" : "home-outline"} 
-              size={24} 
-              color={color} 
+            <Ionicons
+              name={focused ? "home" : "home-outline"}
+              size={24}
+              color={color}
             />
           ),
         }}
@@ -40,25 +53,20 @@ export default function Layout() {
         options={{
           title: "Card",
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons 
-              name={focused ? "card" : "card-outline"} 
-              size={24} 
-              color={color} 
+            <Ionicons
+              name={focused ? "card" : "card-outline"}
+              size={24}
+              color={color}
             />
           ),
         }}
       />
+
+      {/* Hide the entire (auth) route group from tabs */}
       <Tabs.Screen
-        name="profile"
+        name="(auth)"
         options={{
-          title: "Profile",
-          tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons 
-              name={focused ? "person" : "person-outline"} 
-              size={24} 
-              color={color} 
-            />
-          ),
+          href: null, // This completely hides the route group from tabs
         }}
       />
     </Tabs>
