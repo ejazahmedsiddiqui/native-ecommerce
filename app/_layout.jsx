@@ -81,6 +81,12 @@ export default function Layout() {
           href: null, // This completely hides the route group from tabs
         }}
       />
+      <Tabs.Screen
+        name="(profileMenu)"
+        options={{
+          href: null, // This completely hides the route group from tabs
+        }}
+      />
     </Tabs>
   );
 }

@@ -25,9 +25,6 @@ const profile = ({ userDetails }) => {
     { icon: 'percent', iconSet: MaterialIcons, label: 'Promotions', color: '#f59e0b' },
     { icon: 'settings', iconSet: Ionicons, label: 'Settings', color: '#6b7280' },
     { icon: 'log-out', iconSet: Feather, label: 'Logout', color: theme.colors.accent.red[800] },
-    { icon: 'log-in', iconSet: Feather, label: 'Login', color: theme.colors.accent.blue[700] },
-    { icon: 'app-registration', iconSet: MaterialIcons, label: 'Register', color: theme.colors.accent.yellow[600] },
-    { icon: 'guest', iconSet: Zocial, label: 'Guest', color: theme.colors.accent.orange[500] },
   ];
 
 
@@ -37,38 +34,26 @@ const profile = ({ userDetails }) => {
     // Handle different menu items
     switch (label) {
       case 'Your Favourites':
-        // router.push('/favourites'); // Uncomment when you have this screen
+        router.push('/(profileMenu)/Favourites');
         break;
       case 'Wallet':
-        // router.push('/wallet'); // Uncomment when you have this screen
+        router.push('/(profileMenu)/Wallet');
         break;
       case 'Payment':
-        // router.push('/payment'); // Uncomment when you have this screen
+        router.push('/(profileMenu)/Payment');
         break;
       case 'Friends':
-        // router.push('/friends'); // Uncomment when you have this screen
+        router.push('/(profileMenu)/Friends');
         break;
       case 'Promotions':
-        // router.push('/promotions'); // Uncomment when you have this screen
+        router.push('/(profileMenu)/Promotions');
         break;
       case 'Settings':
-        // router.push('/settings'); // Uncomment when you have this screen
+        router.push('/(profileMenu)/Settings');
         break;
       case 'Logout':
         // Navigate to sign in screen
         router.replace('/(auth)/signIn');
-        break;
-      case 'Login':
-        // Navigate to sign in screen
-        router.replace('/(auth)/login');
-        break;
-      case 'Register':
-        // Navigate to sign in screen
-        router.replace('/(auth)/register');
-        break;
-      case 'Guest':
-        // Navigate to sign in screen
-        router.replace('/(auth)/guest');
         break;
       default:
         console.log('Unknown menu item');
