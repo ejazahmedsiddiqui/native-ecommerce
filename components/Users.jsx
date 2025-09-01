@@ -6,20 +6,22 @@ import {
 } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { theme } from '../utils/themes';
+import { useState } from 'react';
 const Users = ({ item }) => {
     return (
-        <View style={styles.userCard}>
+        <View style={[styles.userCard, item.status === 'Active' ? styles.activeStatus : styles.inactiveStatus]}>
             <TouchableOpacity style={styles.cardContent} activeOpacity={0.8}>
                 {/* Header Section */}
                 <View style={styles.headerSection}>
                     <Text style={styles.userName}>{item.name}</Text>
-                    <Text style={styles.username}>@{item.username}</Text>
+                    <Text style={[item.status === 'Active' ? styles.usernameActive : styles.usernameInactive]}>@{item.username}</Text>
                 </View>
 
                 {/* Contact Section */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>
+                    <Text style={item.status === 'Active' ? styles.sectionTitleActive : styles.sectionTitleInactive}>
                         <AntDesign name="contacts" size={24} color="black" /> Contact</Text>
                     <View style={styles.contact}>
                         <Text style={styles.contactText}>{item.email}</Text>
@@ -32,7 +34,7 @@ const Users = ({ item }) => {
 
                 {/* Address Section */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}><SimpleLineIcons name="location-pin" size={24} color="black" /> Address</Text>
+                    <Text style={item.status === 'Active' ? styles.sectionTitleActive : styles.sectionTitleInactive}><SimpleLineIcons name="location-pin" size={24} color="black" /> Address</Text>
                     <View style={styles.addressContainer}>
                         <Text style={styles.addressText}>{item.address.street}, {item.address.suite}</Text>
                         <Text style={styles.addressText}>{item.address.city} - {item.address.zipcode}</Text>
@@ -41,7 +43,7 @@ const Users = ({ item }) => {
 
                 {/* Company Section */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>🏢 Company</Text>
+                    <Text style={item.status === 'Active' ? styles.sectionTitleActive : styles.sectionTitleInactive}><FontAwesome5 name="building" size={24} color="black" /> Company</Text>
                     <View style={styles.company}>
 
                         <Text style={styles.companyName}>{item.company.name}</Text>
@@ -55,8 +57,8 @@ const Users = ({ item }) => {
                     <View style={styles.statusBadge}>
                         <Text style={styles.statusText}>{item.role}</Text>
                     </View>
-                    <View style={[styles.statusBadge, item.status === 'active' ? styles.activeStatus : styles.inactiveStatus]}>
-                        <Text style={styles.statusText}>{item.status}</Text>
+                    <View style={[styles.statusBadge, item.status === 'Active' ? styles.activeStatus : styles.inactiveStatus]}>
+                        <Text style={item.status === 'Active' ? styles.statusTextActive : styles.statusTextInactive}>{item.status}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -95,18 +97,30 @@ const styles = StyleSheet.create({
         color: theme.colors.text.primary,
         marginBottom: 4,
     },
-    username: {
+    usernameActive: {
         fontSize: 16,
         color: theme.colors.text.secondary,
+        fontStyle: 'italic',
+    },
+    usernameInactive: {
+        fontSize: 16,
+        color: theme.colors.text.inverse,
         fontStyle: 'italic',
     },
     section: {
         marginBottom: 20,
     },
-    sectionTitle: {
+    sectionTitleActive: {
         fontSize: 16,
         fontWeight: '600',
         color: theme.colors.text.secondary,
+        marginBottom: 8,
+        letterSpacing: 0.5,
+    },
+    sectionTitleInactive: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: theme.colors.text.inverse,
         marginBottom: 8,
         letterSpacing: 0.5,
     },
@@ -179,16 +193,28 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     activeStatus: {
-        backgroundColor: '#d5f4e6',
+        backgroundColor: theme.colors.background.tertiary,
+        borderColor: 'black',
+        borderWidth: 2
     },
     inactiveStatus: {
-        backgroundColor: '#fadbd8',
+        backgroundColor: theme.colors.error,
+        borderColor: 'white',
+        borderWidth: 2
     },
-    statusText: {
+    statusTextActive: {
         fontSize: 12,
         fontWeight: '600',
-        color: '#2c3e50',
+        color: theme.colors.text.primary,
         textTransform: 'uppercase',
         letterSpacing: 0.5,
     },
+    statusTextInactive: {
+        fontSize: 12,
+        fontWeight: '600',
+        color: theme.colors.text.inverse,
+        textTransform: 'uppercase',
+        letterSpacing: 0.5,
+    },
+
 })

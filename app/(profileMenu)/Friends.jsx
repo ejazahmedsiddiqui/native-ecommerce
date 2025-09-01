@@ -11,8 +11,14 @@ import {
 } from 'react-native';
 import Users from '../../components/Users';
 import { theme } from '../../utils/themes';
+import { useRouter } from 'expo-router';
+
 
 const Friends = () => {
+
+  const router = useRouter();
+
+
   // Fetch users from API
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true);
@@ -68,21 +74,20 @@ const Friends = () => {
     }
   };
 
-  // Load more users (renamed from loadMoreProducts)
   const loadMoreUsers = async () => {
     if (loadingMore || !hasMore) return;
 
     const nextPage = page + 1;
     setPage(nextPage);
-    await fetchUsers(nextPage, true); // ✅ Call fetchUsers, not fetchProducts
+    await fetchUsers(nextPage, true);
   };
 
   // Fetch users when component mounts
   useEffect(() => {
-    fetchUsers(1, false); // ✅ Call fetchUsers, not fetchProducts
+    fetchUsers(1, false);
   }, []);
 
-  // Render user card (renamed from renderProduct)
+  // Render user card 
   const renderUser = useCallback(({ item }) => (
     <Users item={item} />
   ), []);
@@ -101,7 +106,7 @@ const Friends = () => {
       <View style={styles.footerContainer}>
         <TouchableOpacity
           style={styles.showMoreButton}
-          onPress={loadMoreUsers} // ✅ Call loadMoreUsers, not loadMoreProducts
+          onPress={loadMoreUsers}
           disabled={loadingMore}
         >
           {loadingMore ? (
@@ -144,7 +149,7 @@ const Friends = () => {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.push('/')}
+          onPress={() => router.push('/profile')}
         >
           <Text style={styles.backButtonText}>← Back</Text>
           <Text style={styles.title}>Friends ({users.length})</Text>
@@ -153,7 +158,7 @@ const Friends = () => {
       </View>
       <FlatList
         data={users}
-        renderItem={renderUser} // ✅ Use renderUser, not renderProduct
+        renderItem={renderUser}
         keyExtractor={(item) => item._id.toString()}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
