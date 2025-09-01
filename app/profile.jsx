@@ -17,6 +17,7 @@ import { router } from 'expo-router';
 import { theme } from '../utils/themes'
 
 const profile = ({ userDetails }) => {
+  
   const menuItems = [
     { icon: 'heart', iconSet: Ionicons, label: 'Your Favourites', color: theme.colors.accent.red[700] },
     { icon: 'wallet', iconSet: Ionicons, label: 'Wallet', color: theme.colors.accent.green[400] },
@@ -27,11 +28,9 @@ const profile = ({ userDetails }) => {
     { icon: 'log-out', iconSet: Feather, label: 'Logout', color: theme.colors.accent.red[800] },
   ];
 
-
   const handleMenuPress = (label) => {
     console.log(`Pressed: ${label}`);
 
-    // Handle different menu items
     switch (label) {
       case 'Your Favourites':
         router.push('/(profileMenu)/Favourites');
@@ -52,7 +51,6 @@ const profile = ({ userDetails }) => {
         router.push('/(profileMenu)/Settings');
         break;
       case 'Logout':
-        // Navigate to sign in screen
         router.replace('/(auth)/signIn');
         break;
       default:
@@ -62,8 +60,6 @@ const profile = ({ userDetails }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-
-
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Profile</Text>

@@ -28,9 +28,6 @@ const Favourites = () => {
       } else {
         setLoadingMore(true);
       }
-
-      // Try different pagination parameter formats
-      // Common formats: page, limit, skip, offset
       const response = await fetch(
         `https://fakestoreapiserver.reactbd.org/api/products?page=${pageNum}&limit=20`
       );
@@ -41,15 +38,11 @@ const Favourites = () => {
         const newProducts = data.data || data;
         
         if (isLoadMore) {
-          // Append new products to existing ones
           setProducts(prev => [...prev, ...newProducts]);
         } else {
-          // Replace products for initial load
           setProducts(newProducts);
         }
-        
-        // Check if there are more products to load
-        // If we get less than 20 products, assume no more pages
+
         setHasMore(newProducts.length === 20);
         setError(null);
       } else {
@@ -69,7 +62,6 @@ const Favourites = () => {
     }
   };
 
-  // Load more products
   const loadMoreProducts = async () => {
     if (loadingMore || !hasMore) return;
     
@@ -78,7 +70,6 @@ const Favourites = () => {
     await fetchProducts(nextPage, true);
   };
 
-  // Fetch products when component mounts
   useEffect(() => {
     fetchProducts(1, false);
   }, []);

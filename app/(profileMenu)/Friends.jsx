@@ -4,20 +4,15 @@ import {
   Text,
   FlatList,
   StyleSheet,
-  Image,
   ActivityIndicator,
   Alert,
   TouchableOpacity
 } from 'react-native';
 import Users from '../../components/Users';
 import { theme } from '../../utils/themes';
-import { useRouter } from 'expo-router';
-
+import { router } from 'expo-router';
 
 const Friends = () => {
-
-  const router = useRouter();
-
 
   // Fetch users from API
   const [users, setUsers] = useState([])
@@ -28,6 +23,9 @@ const Friends = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const PER_PAGE = 5;
+  const navigateToProfile = () => {
+    router.replace('/profile');
+  };
 
   const fetchUsers = async (pageNum = 1, isLoadMore = false) => {
     try {
@@ -46,15 +44,10 @@ const Friends = () => {
         const newUsers = data.data || data;
 
         if (isLoadMore) {
-          // Append new users to existing ones
           setUsers(prev => [...prev, ...newUsers]);
         } else {
-          // Replace users for initial load
           setUsers(newUsers);
         }
-
-        // Check if there are more users to load
-        // Match the perPage parameter (10, not 20)
         setHasMore(newUsers.length === PER_PAGE);
         setError(null);
       } else {
@@ -149,12 +142,11 @@ const Friends = () => {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.push('/profile')}
+          onPress={() => navigateToProfile()}
         >
           <Text style={styles.backButtonText}>← Back</Text>
-          <Text style={styles.title}>Friends ({users.length})</Text>
-
         </TouchableOpacity>
+        <Text style={styles.title}>Friends ({users.length})</Text>
       </View>
       <FlatList
         data={users}
@@ -168,19 +160,16 @@ const Friends = () => {
   );
 };
 
-export default Friends;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: 16,
-    paddingTop: 16,
   },
   header: {
     backgroundColor: 'white',
     paddingHorizontal: theme.spacing.lg,
     paddingTop: 20,
+    paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -197,7 +186,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
+    marginTop: 8,
     color: '#333',
+    paddingHorizontal: theme.spacing.sm,
   },
   centerContainer: {
     flex: 1,
@@ -247,5 +238,8 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingBottom: 20,
+    paddingHorizontal: 16,
   },
 });
+
+export default Friends
