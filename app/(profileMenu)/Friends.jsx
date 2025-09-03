@@ -1,20 +1,47 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   FlatList,
   StyleSheet,
+  Image,
   ActivityIndicator,
   Alert,
   TouchableOpacity,
-  BackHandler
 } from 'react-native';
-import Users from '../../components/Users';
+import Users from '../../components/Users'
+import { Ionicons } from '@expo/vector-icons';
+import { router, useNavigation } from 'expo-router';
+import { useCallback } from 'react';
 import { theme } from '../../utils/themes';
-import { router } from 'expo-router';
 
 const Friends = () => {
+  // Navigation
+  const navigation = useNavigation();
 
+  // Effect to handle navigation listener
+  useEffect(() => { 
+    const listener = navigation.addListener('beforeRemove', (e) => {
+      e.preventDefault(); // Prevent default navigation
+      console.log('onback');
+      
+      // Always go back to profile, regardless of navigation history
+      router.replace('/profile');
+    });
+
+    return () => {
+      navigation.removeListener('beforeRemove', listener);
+    };
+  }, []);
+
+  const handleBackPress = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      // Navigate to profile tab if no back stack
+      router.replace('/profile'); // Adjust this path to match your tab structure
+    }
+  };
   // Fetch users from API
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true);
@@ -24,9 +51,7 @@ const Friends = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const PER_PAGE = 5;
-  const navigateToProfile = () => {
-    router.replace('/profile');
-  };
+
 
   const fetchUsers = async (pageNum = 1, isLoadMore = false) => {
     try {
@@ -143,7 +168,7 @@ const Friends = () => {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigateToProfile()}
+          onPress={handleBackPress}
         >
           <Text style={styles.backButtonText}>← Back</Text>
         </TouchableOpacity>

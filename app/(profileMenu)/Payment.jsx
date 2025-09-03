@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,24 +7,47 @@ import {
   Image,
   ActivityIndicator,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { router, useNavigation } from 'expo-router';
+import { useCallback } from 'react';
 import { theme } from '../../utils/themes';
-import { router } from 'expo-router';
 
 const Payment = () => {
+  // Navigation
+  const navigation = useNavigation();
 
-  // Navigate back to profile and clear any intermediate screens
-  const navigateToProfile = () => {
-    router.replace('/profile');
+  // Effect to handle navigation listener
+  useEffect(() => {
+    const listener = navigation.addListener('beforeRemove', (e) => {
+      e.preventDefault(); // Prevent default navigation
+      console.log('onback');
+
+      // Always go back to profile, regardless of navigation history
+      router.replace('/profile');
+    });
+
+    return () => {
+      navigation.removeListener('beforeRemove', listener);
+    };
+  }, []);
+
+  const handleBackPress = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      // Navigate to profile tab if no back stack
+      router.replace('/profile'); // Adjust this path to match your tab structure
+    }
   };
 
-  const [page, setPage] = useState(1);
-  const [payments, setPayments] = useState([]); // Fixed: was boolean, should be array
-  const [hasMore, setHasMore] = useState(true);
-  const [error, setError] = useState(null);
+  const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false); // Fixed: was true, should be false initially
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   const PER_PAGE = 5;
 
@@ -36,7 +59,8 @@ const Payment = () => {
         setLoadingMore(true)
       }
 
-      const response = await fetch(`https://fakestoreapiserver.reactbd.org/api/payments?page=${pageNum}&perPage=${PER_PAGE}`);
+      const response = await fetch(
+        `https://fakestoreapiserver.reactbd.org/api/payments?page=${pageNum}&perPage=${PER_PAGE}`);
 
       const data = await response.json();
 
@@ -75,7 +99,7 @@ const Payment = () => {
 
     const nextPage = page + 1;
     setPage(nextPage);
-    await fetchPayments(nextPage, true); // Fixed: was fetchUsers, should be fetchPayments
+    await fetchPayments(nextPage, true);
   };
 
   useEffect(() => {
@@ -100,17 +124,17 @@ const Payment = () => {
   const renderPayments = useCallback(({ item }) => (
     <View style={[styles.paymentCard, getStatusStyle(item.status)]}>
       <View style={styles.paymentHeader}>
-        <Text style={styles.orderId}>Order #{item.orderId}</Text>
+        <Text style={styles.orderId}>Order No.: {item.orderId}</Text>
         <View style={[styles.statusBadge, getStatusStyle(item.status)]}>
           <Text style={styles.statusText}>{item.status}</Text>
         </View>
       </View>
-      
+
       <View style={styles.paymentDetails}>
         <Text style={styles.amount}>${item.amount}</Text>
         <Text style={styles.method}>via {item.method}</Text>
       </View>
-      
+
       <View style={styles.paymentFooter}>
         <Text style={styles.transactionId}>ID: {item.transactionId}</Text>
         <Text style={styles.date}>{new Date(item.createdAt).toLocaleDateString()}</Text>
@@ -173,13 +197,15 @@ const Payment = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
+        <TouchableOpacity 
           style={styles.backButton}
-          onPress={navigateToProfile}
+          onPress={handleBackPress}
+          activeOpacity={0.7}
         >
-          <Text style={styles.backButtonText}>← Back</Text>
+          <Ionicons name="chevron-back" size={24} color="#111827" />
         </TouchableOpacity>
-        <Text style={styles.title}>Payments ({payments.length})</Text>
+        <Text style={styles.headerTitle}>Payments</Text>
+        <View style={styles.placeholder} />
       </View>
       <FlatList
         data={payments}
@@ -198,129 +224,141 @@ export default Payment
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: theme.colors.background.secondary,
   },
   header: {
-    backgroundColor: 'white',
-    paddingHorizontal: theme.spacing.lg,
-    paddingTop: 20,
-    paddingBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: '#e5e7eb',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   backButton: {
-    padding: theme.spacing.sm,
-    alignSelf: 'flex-start',
+    padding: 8,
+    marginLeft: -8,
   },
-  backButtonText: {
-    fontSize: theme.typography.fontSizes.bodyMedium,
-    color: theme.colors.accent.green[500],
-    fontWeight: theme.typography.fontWeights.medium,
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#111827',
+    flex: 1,
+    textAlign: 'center',
+    marginRight: 40, // Compensate for back button width
+  },
+  placeholder: {
+    width: 40, // Same as back button to center title
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    marginTop: 8,
-    color: '#333',
+    fontSize: theme.typography.fontSizes.heading2,
+    fontWeight: theme.typography.fontWeights.bold,
+    marginBottom: theme.spacing.lg,
+    marginTop: theme.spacing.sm,
+    color: theme.colors.text.primary,
     paddingHorizontal: theme.spacing.sm,
   },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.background.primary,
   },
   loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#666',
+    marginTop: theme.spacing.md,
+    fontSize: theme.typography.fontSizes.bodyMedium,
+    color: theme.colors.text.secondary,
   },
   errorText: {
-    fontSize: 16,
-    color: '#e74c3c',
+    fontSize: theme.typography.fontSizes.bodyMedium,
+    color: theme.colors.accent.red[500],
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: theme.spacing.lg,
   },
   retryText: {
-    fontSize: 16,
-    color: '#3498db',
+    fontSize: theme.typography.fontSizes.bodyMedium,
+    color: theme.colors.accent.blue[500],
     textAlign: 'center',
   },
   footerContainer: {
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: theme.spacing.xl,
   },
   showMoreButton: {
     backgroundColor: theme.colors.accent.red[600],
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 8,
+    paddingHorizontal: theme.spacing.xl,
+    paddingVertical: theme.spacing.md,
+    borderRadius: theme.borderRadius.md,
   },
   showMoreText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: theme.colors.white,
+    fontSize: theme.typography.fontSizes.bodyMedium,
+    fontWeight: theme.typography.fontWeights.bold,
   },
   loadingMoreContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   endMessage: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: theme.typography.fontSizes.bodySmall,
+    color: theme.colors.text.secondary,
     fontStyle: 'italic',
   },
   listContent: {
-    paddingBottom: 20,
-    paddingHorizontal: 16,
+    paddingBottom: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.lg,
   },
   paymentCard: {
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 16,
-    marginVertical: 8,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    backgroundColor: theme.colors.background.primary,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.lg,
+    marginVertical: theme.spacing.sm,
+    ...theme.shadows.md,
   },
   paymentHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: theme.spacing.md,
   },
   orderId: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: theme.typography.fontSizes.bodyMedium,
+    fontWeight: theme.typography.fontWeights.bold,
+    color: theme.colors.text.primary,
   },
   statusBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
+    borderRadius: theme.borderRadius.sm,
   },
   statusText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: 'white',
+    fontSize: theme.typography.fontSizes.caption,
+    fontWeight: theme.typography.fontWeights.bold,
+    color: theme.colors.white,
   },
   paymentDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: theme.spacing.md,
   },
   amount: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2c3e50',
+    fontSize: theme.typography.fontSizes.bodyLarge,
+    fontWeight: theme.typography.fontWeights.bold,
+    color: theme.colors.text.primary,
   },
   method: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: theme.typography.fontSizes.bodySmall,
+    color: theme.colors.text.primary,
   },
   paymentFooter: {
     flexDirection: 'row',
@@ -328,23 +366,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   transactionId: {
-    fontSize: 12,
-    color: '#999',
+    fontSize: theme.typography.fontSizes.caption,
+    color: theme.colors.text.inverse,
   },
   date: {
-    fontSize: 12,
-    color: '#999',
+    fontSize: theme.typography.fontSizes.caption,
+    color: theme.colors.text.inverse,
   },
-  completed: {
-    backgroundColor: '#27ae60',
+    completed: {
+    backgroundColor: theme.colors.accent.green[500],
   },
   pending: {
-    backgroundColor: '#f39c12',
+    backgroundColor: theme.colors.accent.yellow[500],
   },
   failed: {
-    backgroundColor: '#e74c3c',
+    backgroundColor: theme.colors.accent.red[400],
   },
   refunded: {
-    backgroundColor: '#3498db',
+    backgroundColor: theme.colors.accent.blue[500],
   },
 });

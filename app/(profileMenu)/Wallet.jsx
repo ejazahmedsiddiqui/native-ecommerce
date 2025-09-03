@@ -1,37 +1,47 @@
-// Example for Wallet.jsx (apply this pattern to all your profile menu screens)
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
+  FlatList,
   StyleSheet,
-  SafeAreaView,
+  Image,
+  ActivityIndicator,
+  Alert,
   TouchableOpacity,
-  BackHandler,
+  SafeAreaView
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { router, useFocusEffect } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import { useCallback } from 'react';
+import { theme } from '../../utils/themes';
 
 const Wallet = () => {
-  // Custom back button handler
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        // Navigate back to the Profile tab specifically
-        router.navigate('/profile');
-        return true; // Prevent default back behavior
-      };
+  // Navigation
+  const navigation = useNavigation();
 
-      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  // Effect to handle navigation listener
+  useEffect(() => { 
+    const listener = navigation.addListener('beforeRemove', (e) => {
+      e.preventDefault(); // Prevent default navigation
+      console.log('onback');
       
-      return () => subscription?.remove();
-    }, [])
-  );
+      // Always go back to profile, regardless of navigation history
+      router.replace('/profile');
+    });
+
+    return () => {
+      navigation.removeListener('beforeRemove', listener);
+    };
+  }, []);
 
   const handleBackPress = () => {
-    router.navigate('/profile');
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      // Navigate to profile tab if no back stack
+      router.replace('/profile'); // Adjust this path to match your tab structure
+    }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       {/* Custom Header with Back Button */}

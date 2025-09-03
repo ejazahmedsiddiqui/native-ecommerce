@@ -1,58 +1,118 @@
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
+  FlatList,
   StyleSheet,
-  TouchableOpacity
+  Image,
+  ActivityIndicator,
+  Alert,
+  TouchableOpacity,
+  SafeAreaView
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { router, useNavigation } from 'expo-router';
+import { useCallback } from 'react';
 import { theme } from '../../utils/themes';
-import { router } from 'expo-router';
-
 
 const Settings = () => {
+  // Navigation
+  const navigation = useNavigation();
 
-  const navigateToProfile = () => {
-    router.replace('/profile');
+  // Effect to handle navigation listener
+  useEffect(() => { 
+    const listener = navigation.addListener('beforeRemove', (e) => {
+      e.preventDefault(); // Prevent default navigation
+      console.log('onback');
+      
+      // Always go back to profile, regardless of navigation history
+      router.replace('/profile');
+    });
+
+    return () => {
+      navigation.removeListener('beforeRemove', listener);
+    };
+  }, []);
+
+  const handleBackPress = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      // Navigate to profile tab if no back stack
+      router.replace('/profile'); // Adjust this path to match your tab structure
+    }
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      {/* Custom Header with Back Button */}
       <View style={styles.header}>
-        <TouchableOpacity
+        <TouchableOpacity 
           style={styles.backButton}
-          onPress={navigateToProfile}
+          onPress={handleBackPress}
+          activeOpacity={0.7}
         >
-          <Text style={styles.backButtonText}>← Back</Text>
+          <Ionicons name="chevron-back" size={24} color="#111827" />
         </TouchableOpacity>
-        <Text style={styles.title}>Settings </Text>
+        <Text style={styles.headerTitle}>Your Settings</Text>
+        <View style={styles.placeholder} />
       </View>
-      <Text>
-        Settings
-      </Text>
-    </View>
-  )
-}
 
-export default Settings
+      {/* Your screen content here */}
+      <View style={styles.content}>
+        <Text style={styles.contentText}>Your Settings Content</Text>
+      </View>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
+  container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f9fafb',
   },
   header: {
-    backgroundColor: 'white',
-    paddingHorizontal: theme.spacing.lg,
-    paddingTop: 20,
-    paddingBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: '#e5e7eb',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   backButton: {
-    padding: theme.spacing.sm,
-    alignSelf: 'flex-start',
+    padding: 8,
+    marginLeft: -8,
   },
-  backButtonText: {
-    fontSize: theme.typography.fontSizes.bodyMedium,
-    color: theme.colors.accent.green[500],
-    fontWeight: theme.typography.fontWeights.medium,
-  }
-})
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#111827',
+    flex: 1,
+    textAlign: 'center',
+    marginRight: 40, // Compensate for back button width
+  },
+  placeholder: {
+    width: 40, // Same as back button to center title
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  contentText: {
+    fontSize: 16,
+    color: '#6b7280',
+  },
+});
+
+export default Settings;

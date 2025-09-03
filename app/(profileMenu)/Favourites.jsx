@@ -1,34 +1,48 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  View, 
-  Text, 
-  FlatList, 
-  StyleSheet, 
-  Image, 
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Image,
   ActivityIndicator,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import Product from '../../components/Product';
-import { router, useFocusEffect } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { router, useNavigation } from 'expo-router';
+import { useCallback } from 'react';
+import { theme } from '../../utils/themes';
 
 
 const Favourites = () => {
+  // Navigation
+  const navigation = useNavigation();
 
-  // Custom back button handler
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        // Navigate back to the Profile tab specifically
-        router.navigate('/profile');
-        return true; // Prevent default back behavior
-      };
+  // Effect to handle navigation listener
+  useEffect(() => {
+    const listener = navigation.addListener('beforeRemove', (e) => {
+      e.preventDefault(); // Prevent default navigation
+      console.log('onback');
 
-      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      
-      return () => subscription?.remove();
-    }, [])
-  );
+      // Always go back to profile, regardless of navigation history
+      router.replace('/profile');
+    });
+
+    return () => {
+      navigation.removeListener('beforeRemove', listener);
+    };
+  }, []);
+
+  const handleBackPress = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      // Navigate to profile tab if no back stack
+      router.replace('/profile'); // Adjust this path to match your tab structure
+    }
+  };
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -47,12 +61,12 @@ const Favourites = () => {
       const response = await fetch(
         `https://fakestoreapiserver.reactbd.org/api/products?page=${pageNum}&limit=20`
       );
-      
+
       const data = await response.json();
-      
+
       if (response.ok) {
         const newProducts = data.data || data;
-        
+
         if (isLoadMore) {
           setProducts(prev => [...prev, ...newProducts]);
         } else {
@@ -80,7 +94,7 @@ const Favourites = () => {
 
   const loadMoreProducts = async () => {
     if (loadingMore || !hasMore) return;
-    
+
     const nextPage = page + 1;
     setPage(nextPage);
     await fetchProducts(nextPage, true);
@@ -98,7 +112,7 @@ const Favourites = () => {
   };
 
   const renderProduct = useCallback(({ item }) => (
-    <Product item={item} onCalculateDiscount={calculateDiscount}/>
+    <Product item={item} onCalculateDiscount={calculateDiscount} />
   ), []);
 
   // Render Show More button
@@ -113,8 +127,8 @@ const Favourites = () => {
 
     return (
       <View style={styles.footerContainer}>
-        <TouchableOpacity 
-          style={styles.showMoreButton} 
+        <TouchableOpacity
+          style={styles.showMoreButton}
           onPress={loadMoreProducts}
           disabled={loadingMore}
         >
@@ -155,7 +169,17 @@ const Favourites = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Products ({products.length})</Text>
+      <View style={styles.header}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={handleBackPress}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="chevron-back" size={24} color="#111827" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Your Favourites {products.length}</Text>
+        <View style={styles.placeholder} />
+      </View>
       <FlatList
         data={products}
         renderItem={renderProduct}
@@ -172,6 +196,40 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#ffffff',
+    paddingTop: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e7eb',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  backButton: {
+    padding: 8,
+    marginLeft: -8,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#111827',
+    flex: 1,
+    textAlign: 'center',
+    marginRight: 40, // Compensate for back button width
+  },
+  placeholder: {
+    width: 40, // Same as back button to center title
   },
   centerContainer: {
     flex: 1,
@@ -194,13 +252,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#3498db',
     textDecorationLine: 'underline',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
   },
   listContent: {
     padding: 16,

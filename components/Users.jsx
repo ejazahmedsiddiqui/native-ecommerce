@@ -8,7 +8,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { theme } from '../utils/themes';
-import { useState } from 'react';
+import { useCallback } from 'react';
 const Users = ({ item }) => {
     return (
         <View style={[styles.userCard, item.status === 'Active' ? styles.activeStatus : styles.inactiveStatus]}>

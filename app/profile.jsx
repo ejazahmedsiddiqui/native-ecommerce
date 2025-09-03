@@ -17,7 +17,7 @@ import { router } from 'expo-router';
 import { theme } from '../utils/themes'
 
 const profile = ({ userDetails }) => {
-  
+
   const menuItems = [
     { icon: 'heart', iconSet: Ionicons, label: 'Your Favourites', color: theme.colors.accent.red[700] },
     { icon: 'wallet', iconSet: Ionicons, label: 'Wallet', color: theme.colors.accent.green[400] },
@@ -33,31 +33,26 @@ const profile = ({ userDetails }) => {
 
     switch (label) {
       case 'Your Favourites':
-        // Clear navigation state and push to ensure clean navigation
-        router.dismissAll();
         router.push('/(profileMenu)/Favourites');
         break;
       case 'Wallet':
-        router.dismissAll();
         router.push('/(profileMenu)/Wallet');
         break;
       case 'Payment':
-        router.dismissAll();
         router.push('/(profileMenu)/Payment');
         break;
       case 'Friends':
-        router.dismissAll();
         router.push('/(profileMenu)/Friends');
         break;
       case 'Promotions':
-        router.dismissAll();
         router.push('/(profileMenu)/Promotions');
         break;
       case 'Settings':
-        router.dismissAll();
         router.push('/(profileMenu)/Settings');
         break;
       case 'Logout':
+        // For logout, you might want to clear everything and go to auth
+        router.dismissAll();
         router.replace('/(auth)/signIn');
         break;
       default:
