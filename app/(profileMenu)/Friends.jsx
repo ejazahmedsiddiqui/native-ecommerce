@@ -6,7 +6,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  BackHandler
 } from 'react-native';
 import Users from '../../components/Users';
 import { theme } from '../../utils/themes';

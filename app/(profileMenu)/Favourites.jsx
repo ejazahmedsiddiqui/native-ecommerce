@@ -10,9 +10,25 @@ import {
   TouchableOpacity
 } from 'react-native';
 import Product from '../../components/Product';
+import { router, useFocusEffect } from 'expo-router';
 
 
 const Favourites = () => {
+
+  // Custom back button handler
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        // Navigate back to the Profile tab specifically
+        router.navigate('/profile');
+        return true; // Prevent default back behavior
+      };
+
+      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      
+      return () => subscription?.remove();
+    }, [])
+  );
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
