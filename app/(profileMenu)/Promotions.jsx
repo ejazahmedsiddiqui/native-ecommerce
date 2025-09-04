@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     marginRight: 40,
   },
   placeholder: {
-    width: 40, 
+    width: 40,
     paddingVertical: 20,
     paddingBottom: 40,
     alignItems: 'center',
@@ -245,6 +245,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+footerContainer: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingVertical: 20,
+},
   endMessage: {
     fontSize: 16,
     color: '#666',

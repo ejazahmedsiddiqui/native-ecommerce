@@ -170,7 +170,7 @@ const Favourites = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.backButton}
           onPress={handleBackPress}
           activeOpacity={0.7}

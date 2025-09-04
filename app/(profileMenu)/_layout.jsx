@@ -12,6 +12,7 @@ export default function ProfileLayout() {
       <Stack.Screen name="Friends" />
       <Stack.Screen name="Payment" />
       <Stack.Screen name="Promotions" />
+      <Stack.Screen name="Cart" />
       <Stack.Screen name="Settings" />
       <Stack.Screen name="Wallet" />
     </Stack>

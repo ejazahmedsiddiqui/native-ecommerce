@@ -11,7 +11,7 @@ import {
   Ionicons,
   MaterialIcons,
   Feather,
-  Zocial
+  EvilIcons
 } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { theme } from '../utils/themes'
@@ -24,6 +24,7 @@ const profile = ({ userDetails }) => {
     { icon: 'card', iconSet: Ionicons, label: 'Payment', color: theme.colors.accent.blue[600] },
     { icon: 'people', iconSet: Ionicons, label: 'Friends', color: '#8b5cf6' },
     { icon: 'percent', iconSet: MaterialIcons, label: 'Promotions', color: '#f59e0b' },
+    { icon: 'cart', iconSet: EvilIcons, label: 'Cart', color: theme.colors.black },
     { icon: 'settings', iconSet: Ionicons, label: 'Settings', color: '#6b7280' },
     { icon: 'log-out', iconSet: Feather, label: 'Logout', color: theme.colors.accent.red[800] },
   ];
@@ -46,6 +47,9 @@ const profile = ({ userDetails }) => {
         break;
       case 'Promotions':
         router.push('/(profileMenu)/Promotions');
+        break;
+      case 'Cart':
+        router.push('/(profileMenu)/Cart');
         break;
       case 'Settings':
         router.push('/(profileMenu)/Settings');
